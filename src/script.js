@@ -9,51 +9,44 @@ const mycanvas = document.querySelector("canvas.webgl")
 const scene = new THREE.Scene();
 
 
-// ----------- Object --------------
-// geometry
-// width, height, depth <- parameters
-const geometry = new THREE.BoxGeometry (1,1,1)
+// ----------- Group and Object --------------
 
-// material
-// parameters sent as object 
-const material = new THREE.MeshBasicMaterial({color: "red"})
+const group = new THREE.Group()
 
-// mesh
-// now create a mesh to render the geometry with the material
-const mesh = new THREE.Mesh(geometry, material)
-
-// position of mesh 
-mesh.position.x = 1
-mesh.position.y = -1
-mesh.position.z = 0.3
-// mesh.position.set(x, y, z) <<--- another way to set co-ordinates
+// instantiating the cube Mesh directly
+const cube1 = new THREE.Mesh(
+    new THREE.BoxGeometry(1,1,1),
+    new THREE.MeshBasicMaterial({ color : "blue"})
+)
+// add the cube to the scene
+group.add(cube1)
 
 
-// scale of mesh
-mesh.scale.x = 2
-mesh.scale.y = 0.7
-mesh.scale.z = 0.5
-// mesh.scale.set(x, y, z) <<--- another way to set scale
+// instantiating the cube Mesh directly
+const cube2 = new THREE.Mesh(
+    new THREE.BoxGeometry(1,1,1),
+    new THREE.MeshBasicMaterial({ color : "red"})
+)
+cube2.position.x = 1.6
+// add the cube to the scene
+group.add(cube2)
 
 
-// rotation of mesh
-mesh.rotation.reorder('YXZ') // <<--- telling explicitly that i want the to rotate in this order
-// ^^^ if we wanna put reorder, do it before actually rotating
+// instantiating the cube Mesh directly
+const cube3 = new THREE.Mesh(
+    new THREE.BoxGeometry(1,1,1),
+    new THREE.MeshBasicMaterial({ color : "green"})
+)
+cube3.position.x = -1.6
+// add the cube to the scene
+group.add(cube3)
 
-mesh.rotation.x = Math.PI * 0.25
-mesh.rotation.y = Math.PI * 0.25
 
-// --------------------------------------
-scene.add(mesh)
-
-
-// to find the distance between center of scene and object present
-console.log("center to obj", mesh.position.length())
-
-// brings the position vector to unit vector
-mesh.position.normalize() 
-console.log("normalized distance", mesh.position.length()) // <-- to 1
-
+group.position.set(0, 1, -0.5)
+group.scale.y = 2
+group.rotation.x = 3
+// add the group to the scene
+scene.add(group)
 
 // ------------ Camera ------------
 // camera will be an Object3D instance
@@ -72,15 +65,6 @@ camera.position.y = 0
 camera.position.x = 0
 scene.add(camera)
 // ------------------------------------
-
-// if we want to look at some object (rotates the object so -z faces the target)
-// "lookAt" takes in a '''Vector3 object <- tagret'''
-camera.lookAt(mesh.position)
-
-
-// to find the distance between the object object present in the scene and camera
-// have to pass a parameter to "DistanceTo"
-console.log("camera to obj", mesh.position.distanceTo(camera.position))
 
 
 
@@ -104,6 +88,4 @@ renderer.setSize(sizes.width, sizes.height)
 // parameters/sending it to scene and camera
 renderer.render(scene, camera)
 // ---------------------------------
-
-
 
